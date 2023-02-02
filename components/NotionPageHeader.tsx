@@ -4,9 +4,9 @@ import * as types from 'notion-types'
 import { IoMoonSharp } from '@react-icons/all-files/io5/IoMoonSharp'
 import { IoSunnyOutline } from '@react-icons/all-files/io5/IoSunnyOutline'
 import cs from 'classnames'
-import { Breadcrumbs, Header, Search, useNotionContext } from 'react-notion-x'
+import { Breadcrumbs, Search, useNotionContext } from 'react-notion-x'
 
-import { isSearchEnabled, navigationLinks, navigationStyle } from '@/lib/config'
+import { navigationLinks, navigationStyle } from '@/lib/config'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
 import styles from './styles.module.css'
@@ -39,8 +39,9 @@ export const NotionPageHeader: React.FC<{
   const { components, mapPageUrl } = useNotionContext()
 
   if (navigationStyle === 'default') {
-    return <Header block={block} />
+    // return <Header block={block} />
   }
+  // console.log('navigationLinks:', navigationLinks)
 
   return (
     <header className='notion-header'>
@@ -54,33 +55,43 @@ export const NotionPageHeader: React.FC<{
                 return null
               }
 
-              if (link.pageId) {
-                return (
-                  <components.PageLink
-                    href={mapPageUrl(link.pageId)}
-                    key={index}
-                    className={cs(styles.navLink, 'breadcrumb', 'button')}
-                  >
-                    {link.title}
-                  </components.PageLink>
-                )
-              } else {
-                return (
-                  <components.Link
-                    href={link.url}
-                    key={index}
-                    className={cs(styles.navLink, 'breadcrumb', 'button')}
-                  >
-                    {link.title}
-                  </components.Link>
-                )
-              }
+              return (
+                <components.PageLink
+                  href={mapPageUrl(link.pageId)}
+                  key={index}
+                  className={cs(styles.navLink, 'breadcrumb', 'button')}
+                >
+                  {link.title}
+                </components.PageLink>
+              )
+
+              // if (link.pageId) {
+              //   return (
+              //     <components.PageLink
+              //       href={mapPageUrl(link.pageId)}
+              //       key={index}
+              //       className={cs(styles.navLink, 'breadcrumb', 'button')}
+              //     >
+              //       {link.title}
+              //     </components.PageLink>
+              //   )
+              // } else {
+              //   return (
+              //     <components.Link
+              //       href={link.url}
+              //       key={index}
+              //       className={cs(styles.navLink, 'breadcrumb', 'button')}
+              //     >
+              //       {link.title}
+              //     </components.Link>
+              //   )
+              // }
             })
             .filter(Boolean)}
 
           <ToggleThemeButton />
-
-          {isSearchEnabled && <Search block={block} title={null} />}
+          <Search block={block} title={null} />
+          {/* {isSearchEnabled && <Search block={block} title={null} />} */}
         </div>
       </div>
     </header>
