@@ -10,7 +10,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port=3005",
     "build": "next build",
     "start": "next start",
     "deploy": "vercel deploy",

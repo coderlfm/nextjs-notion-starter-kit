@@ -6,10 +6,11 @@ import { useRouter } from 'next/router'
 
 import cs from 'classnames'
 import { PageBlock } from 'notion-types'
-import { formatDate, getBlockTitle, getPageProperty } from 'notion-utils'
+// import {  getBlockTitle, getPageProperty } from 'notion-utils'
+import {  getBlockTitle, getPageProperty } from 'notion-utils'
 import BodyClassName from 'react-body-classname'
 import { NotionRenderer } from 'react-notion-x'
-import TweetEmbed from 'react-tweet-embed'
+// import TweetEmbed from 'react-tweet-embed'
 import { useSearchParam } from 'react-use'
 
 import * as config from '@/lib/config'
@@ -20,7 +21,7 @@ import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
 
 import { Footer } from './Footer'
-import { GitHubShareButton } from './GitHubShareButton'
+// import { GitHubShareButton } from './GitHubShareButton'
 import { Loading } from './Loading'
 import { NotionPageHeader } from './NotionPageHeader'
 import { Page404 } from './Page404'
@@ -31,6 +32,14 @@ import styles from './styles.module.css'
 // -----------------------------------------------------------------------------
 // dynamic imports for optional components
 // -----------------------------------------------------------------------------
+
+export const formatDate = (  input: string | number) => {
+  const date = new Date(input)
+  const monthLocale = date.toLocaleString('zh-CN', {
+    month: 'long', year: "numeric", day:'numeric'
+  })
+  return monthLocale
+}
 
 const Code = dynamic(() =>
   import('react-notion-x/build/third-party/code').then(async (m) => {
@@ -69,7 +78,7 @@ const Code = dynamic(() =>
       import('prismjs/components/prism-yaml.js')
     ])
     return m.Code
-  })
+  }), { ssr: false }
 )
 
 const Collection = dynamic(() =>
@@ -97,19 +106,22 @@ const Modal = dynamic(
   }
 )
 
-const Tweet = ({ id }: { id: string }) => {
-  return <TweetEmbed tweetId={id} />
-}
+// const Tweet = ({ id }: { id: string }) => {
+//   return <TweetEmbed tweetId={id} />
+// }
 
 const propertyLastEditedTimeValue = (
   { block, pageHeader },
   defaultFn: () => React.ReactNode
 ) => {
+  // console.log('最后更新时间:',block);
   if (pageHeader && block?.last_edited_time) {
-    return `Last updated ${formatDate(block?.last_edited_time, {
-      month: 'long'
-    })}`
+    // return `Last updated ${formatDate(block?.last_edited_time, {
+    //   month: 'long'
+    // })}`
+    return `最后更新时间 ${formatDate(block?.last_edited_time)}`
   }
+
 
   return defaultFn()
 }
@@ -118,13 +130,16 @@ const propertyDateValue = (
   { data, schema, pageHeader },
   defaultFn: () => React.ReactNode
 ) => {
+  // console.log('block:',block, data);
   if (pageHeader && schema?.name?.toLowerCase() === 'published') {
     const publishDate = data?.[0]?.[1]?.[0]?.[1]?.start_date
+    // console.log(`${formatDate(publishDate, {
+    //   month: 'long'
+    // })}`);
 
     if (publishDate) {
-      return `${formatDate(publishDate, {
-        month: 'long'
-      })}`
+      return publishDate;
+      // return formatDate(publishDate)
     }
   }
 
@@ -155,16 +170,19 @@ export const NotionPage: React.FC<types.PageProps> = ({
     () => ({
       nextImage: Image,
       nextLink: Link,
+      // Link: Link,
+      // PageLink: Link,
       Code,
       Collection,
       Equation,
       Pdf,
       Modal,
-      Tweet,
+      // Tweet,
       Header: NotionPageHeader,
       propertyLastEditedTimeValue,
       propertyTextValue,
-      propertyDateValue
+      propertyDateValue,
+      // propertyCreatedTimeValue
     }),
     []
   )
@@ -191,7 +209,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
     block?.type === 'page' && block?.parent_table === 'collection'
 
   const showTableOfContents = !!isBlogPost
-  const minTableOfContentsItems = 3
+  // const minTableOfContentsItems = 3
 
   const pageAside = React.useMemo(
     () => (
@@ -212,13 +230,13 @@ export const NotionPage: React.FC<types.PageProps> = ({
 
   const title = getBlockTitle(block, recordMap) || site.name
 
-  console.log('notion page', {
-    isDev: config.isDev,
-    title,
-    pageId,
-    rootNotionPageId: site.rootNotionPageId,
-    recordMap
-  })
+  // console.log('notion page', {
+  //   isDev: config.isDev,
+  //   title,
+  //   pageId,
+  //   rootNotionPageId: site.rootNotionPageId,
+  //   recordMap
+  // })
 
   if (!config.isServer) {
     // add important objects to the window global for easy debugging
@@ -243,7 +261,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
     config.description
 
   return (
-    <>
+    <div>
       <PageHead
         pageId={pageId}
         site={site}
@@ -253,6 +271,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
         url={canonicalPageUrl}
       />
 
+{/* <NotionPageHeader block={block as any} /> */}
       {isLiteMode && <BodyClassName className='notion-lite' />}
       {isDarkMode && <BodyClassName className='dark-mode' />}
 
@@ -264,24 +283,25 @@ export const NotionPage: React.FC<types.PageProps> = ({
         darkMode={isDarkMode}
         components={components}
         recordMap={recordMap}
-        rootPageId={site.rootNotionPageId}
-        rootDomain={site.domain}
+        // rootPageId={site.rootNotionPageId}
+        // rootDomain={site.domain}
         fullPage={!isLiteMode}
         previewImages={!!recordMap.preview_images}
         showCollectionViewDropdown={false}
         showTableOfContents={showTableOfContents}
-        minTableOfContentsItems={minTableOfContentsItems}
-        defaultPageIcon={config.defaultPageIcon}
-        defaultPageCover={config.defaultPageCover}
-        defaultPageCoverPosition={config.defaultPageCoverPosition}
+        // minTableOfContentsItems={minTableOfContentsItems}
+        // defaultPageIcon={config.defaultPageIcon}
+        // defaultPageCover={config.defaultPageCover}
+        // defaultPageCoverPosition={config.defaultPageCoverPosition}
         mapPageUrl={siteMapPageUrl}
-        mapImageUrl={mapImageUrl}
+        // mapImageUrl={mapImageUrl}
         searchNotion={config.isSearchEnabled ? searchNotion : null}
         pageAside={pageAside}
         footer={footer}
+
       />
 
-      <GitHubShareButton />
-    </>
+      {/* <GitHubShareButton /> */}
+    </div>
   )
 }
