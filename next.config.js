@@ -4,6 +4,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 module.exports = withBundleAnalyzer({
+  future: { },
   staticPageGenerationTimeout: 300,
   images: {
     domains: [
@@ -17,6 +18,7 @@ module.exports = withBundleAnalyzer({
     ],
     formats: ['image/avif', 'image/webp'],
     dangerouslyAllowSVG: true,
+    unoptimized: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
   }
 })
