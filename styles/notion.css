@@ -441,3 +441,7 @@
 code[class*="language-"], pre[class*="language-"] {
   tab-size: 2!important;
 }
+
+.notion-callout-text div{
+  padding:0!important;
+}
