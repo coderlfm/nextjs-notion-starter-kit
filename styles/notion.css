@@ -449,3 +449,8 @@ code[class*="language-"], pre[class*="language-"] {
 .notion-callout-text div{
   padding:0!important;
 }
+
+/* 安卓字体加粗 */
+.Android .notion b, .Android .notion-title, .Android .notion-h, .Android .notion-collection-header-title {
+  font-weight: bold;
+}

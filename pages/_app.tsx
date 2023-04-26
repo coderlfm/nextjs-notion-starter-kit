@@ -61,5 +61,11 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [router.events])
 
+  React.useEffect(()=>{
+    if (/Android/i.test(navigator.userAgent)) {
+      document.body.className += ' Android'
+    }
+  },[])
+
   return <Component {...pageProps} />
 }
