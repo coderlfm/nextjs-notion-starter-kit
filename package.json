@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "next dev --port=3005",
     "build": "next build",
+    "static": "next build && next export",
     "start": "next start",
     "deploy": "vercel deploy",
     "deps": "run-s deps:*",
