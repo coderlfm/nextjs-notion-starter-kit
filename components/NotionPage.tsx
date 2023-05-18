@@ -171,7 +171,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
       nextImage: Image,
       nextLink: Link,
       // Link: Link,
-      // PageLink: Link,
+      PageLink: (props) => <a {...props} href={props.href + '.html'}/>,
       Code,
       Collection,
       Equation,
