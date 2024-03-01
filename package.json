@@ -10,7 +10,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "dev": "next dev --port=3005",
+    "dev": "next dev --port=5005",
     "build": "next build",
     "static": "next build && next export && next-sitemap",
     "test1": "next-sitemap",

@@ -221,3 +221,7 @@
 .hidden {
   visibility: hidden;
 }
+
+.text {
+  color: var(--fg-color);
+}
